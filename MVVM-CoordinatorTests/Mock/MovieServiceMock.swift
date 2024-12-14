@@ -9,7 +9,10 @@ import Foundation
 @testable import MVVM_Coordinator
 
 class MoviesMockService: MoviesServicable {
+    var getMoviesCallCount = 0
     func getMovies() async throws -> MovieResponse {
+        getMoviesCallCount += 1
+        
         // Simulate a delay to mimic a network call
         try await Task.sleep(nanoseconds: 500_000_000) // 0.5 seconds
         

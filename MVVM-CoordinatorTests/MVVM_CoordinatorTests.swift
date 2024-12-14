@@ -10,9 +10,31 @@ import Testing
 
 struct MVVM_CoordinatorTests {
 
-    // TODO
-    @Test func example() async throws {
-        // Write your test here and use APIs like `#expect(...)` to check expected conditions.
+    @Test
+    func moviesViewModel() async throws {
+        let mockedService = MoviesMockService()
+        let viewModel = MoviesViewModel(service: mockedService)
+
+        await viewModel.fetchMovies()
+        let count = mockedService.getMoviesCallCount
+        #expect(count == 1)
+        let movies = viewModel.movies
+        #expect(movies.count == 3)
+    }
+    
+    @Test
+    func movieDetailsViewModel() async throws {
+        let mockedService = MovieDetailsMockService()
+        let movie = Movie(id: 1, title: "Mock Movie 1", overview: "Nothing")
+        let viewModel = MovieDetailsViewModel(movie: movie, service: mockedService)
+        
+        await viewModel.fetchData()
+        let count = mockedService.getCallCount
+        #expect(count == 1)
+        #expect(mockedService.getMovieArgument == movie)
+        let movieDetails = viewModel.movieDetails
+        #expect(movieDetails?.originalLanguage ?? "" == "English")
+        #expect(movieDetails?.overview ?? "" == "Nothing")
     }
 
 }
